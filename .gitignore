@@ -1,0 +1,4 @@
+# gitignore for dotnet projects
+bin/
+obj/
+*.db
