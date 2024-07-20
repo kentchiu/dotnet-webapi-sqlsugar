@@ -1,5 +1,7 @@
 using SqlSugar;
 
+namespace TodoApi.Models;
+
 public class Product
 {
     [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]

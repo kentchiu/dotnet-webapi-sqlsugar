@@ -1,4 +1,5 @@
 using SqlSugar;
+using TodoApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
