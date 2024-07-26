@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
 using TodoApi.Models;
@@ -9,10 +10,12 @@ namespace TodoApi.Controllers;
 public class ProductsController : ControllerBase
 {
     private readonly ISqlSugarClient _db;
+    private readonly IMapper _mapper;
 
-    public ProductsController(ISqlSugarClient db)
+    public ProductsController(ISqlSugarClient db, IMapper mapper)
     {
         _db = db;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -23,8 +26,13 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post(Product product)
+    public async Task<IActionResult> Post(ProductCreation productCreation)
     {
+        System.Console.Error.WriteLine(
+            $"🟥[1]: ProductsController.cs:31: productCreation={productCreation}"
+        );
+        var product = _mapper.Map<Product>(productCreation);
+        System.Console.Error.WriteLine($"🟥[2]: ProductsController.cs:32: product={product}");
         await _db.Insertable(product).ExecuteCommandAsync();
         return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
     }
