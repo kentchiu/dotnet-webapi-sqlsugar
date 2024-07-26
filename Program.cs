@@ -20,7 +20,7 @@ builder.Services.AddSingleton<ISqlSugarClient>(s =>
             // Singleton parameter configuration, effective for all contexts
             db.Aop.OnLogExecuting = (sql, pars) =>
             {
-                System.Console.Error.WriteLine($"🟥[1]: Program.cs:20: sql={sql}");
+                System.Console.Error.WriteLine($"-->SQL: {sql}");
             };
         }
     );
