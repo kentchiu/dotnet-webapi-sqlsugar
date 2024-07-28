@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
 using TodoApi.Models;
@@ -25,6 +26,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> Query()
     {
         _logger.LogInformation("Create Product:-------- ");
