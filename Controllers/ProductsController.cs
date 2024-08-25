@@ -26,7 +26,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
+    // [Authorize]
     public async Task<IActionResult> Query()
     {
         _logger.LogInformation("Create Product:-------- ");
