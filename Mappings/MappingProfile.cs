@@ -1,13 +1,12 @@
 using AutoMapper;
 using TodoApi.Models;
 
-namespace TodoApi.Mappings
+namespace TodoApi.Mappings;
+
+public class MappingProfile : Profile
 {
-    public class MappingProfile : Profile
+    public MappingProfile()
     {
-        public MappingProfile()
-        {
-            CreateMap<Product, ProductCreation>().ReverseMap();
-        }
+        CreateMap<Product, ProductCreation>().ReverseMap();
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using SqlSugar;
 using TodoApi.Mappings;
 using TodoApi.Models;
+using TodoApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,7 @@ builder.Services.AddSingleton<ISqlSugarClient>(s =>
             DbType = SqlSugar.DbType.Sqlite,
             ConnectionString = "DataSource=sqlsugar-dev.db",
             IsAutoCloseConnection = true,
-            InitKeyType = InitKeyType.Attribute
+            InitKeyType = InitKeyType.Attribute,
         },
         db =>
         {
@@ -61,12 +62,14 @@ builder
                     builder.Configuration.GetValue<string>("Settings:JwtSettings:SignKey")
                 )
             ),
-            ClockSkew = TimeSpan.Zero
+            ClockSkew = TimeSpan.Zero,
         };
     });
 
 builder.Services.AddAuthorization();
+builder.Services.AddAuthentication("Bearer").AddJwtBearer();
 #endregion
+
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -75,6 +78,8 @@ builder.Services.AddSwaggerGen();
 
 // Add AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+builder.Services.AddScoped<JwtService>();
 
 var app = builder.Build();
 
