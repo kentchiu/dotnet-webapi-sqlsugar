@@ -33,9 +33,7 @@ Accept: application/json
 PATCH http://localhost:5269/api/Products/1
 
 {
-  "Id": 1,
-  "name": "Update Test",
-  "price": 11
+  "name": "Update Test2"
 }
 
 ### delete 

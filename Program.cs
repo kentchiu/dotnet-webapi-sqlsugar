@@ -1,5 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using Microsoft.IdentityModel.Tokens;
 using SqlSugar;
 using TodoApi.Mappings;
@@ -9,8 +11,20 @@ using TodoApi.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddLogging(logging =>
+{
+    logging.AddConsole(options =>
+    {
+        // options.Format = ConsoleLoggerFormat.Default; // Use the format you want here
+    });
+});
+
+// Add services to the container.
 builder.Services.AddSingleton<ISqlSugarClient>(s =>
 {
+    // Add a logger
+    var logger = s.GetRequiredService<ILogger<Program>>();
+
     SqlSugarScope sqlSugar = new SqlSugarScope(
         new ConnectionConfig()
         {
@@ -24,7 +38,7 @@ builder.Services.AddSingleton<ISqlSugarClient>(s =>
             // Singleton parameter configuration, effective for all contexts
             db.Aop.OnLogExecuting = (sql, pars) =>
             {
-                System.Console.Error.WriteLine($"-->SQL: {sql}");
+                logger.LogWarning($"SQL: {sql}");
             };
         }
     );
@@ -67,7 +81,6 @@ builder
     });
 
 builder.Services.AddAuthorization();
-builder.Services.AddAuthentication("Bearer").AddJwtBearer();
 #endregion
 
 builder.Services.AddControllers();

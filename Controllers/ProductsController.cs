@@ -54,13 +54,15 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch(int id, Product product)
+    public async Task<IActionResult> Patch(int id, ProductUpdate dto)
     {
-        if (id != product.Id)
+        var product = await _db.Queryable<Product>().Where(p => p.Id == id).FirstAsync();
+        if (product == null)
         {
-            return BadRequest();
+            return new NotFoundResult();
         }
 
+        _mapper.Map(dto, product);
         var result = await _db.Updateable(product).ExecuteCommandAsync();
         return new OkObjectResult(result);
     }
